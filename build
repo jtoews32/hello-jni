@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# javac JNISample.java 
+# javah -verbose -jni -classpath . JNISample
+
+gcc -shared -fpic -o libfoo.so -I/opt/Oracle_Java/jdk1.8.0_73/include -I/opt/Oracle_Java/jdk1.8.0_73/include/linux -I/opt/Oracle_Java/jdk1.8.0_73/include JNISample.c
+
+java -Djava.library.path=. JNISample
