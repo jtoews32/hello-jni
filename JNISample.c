@@ -179,19 +179,20 @@ int search(char T[], char P[], HashTable table) {
 	return -1;
 }
 
-void read_file(const char* file_name, char P[], HashTable lastTable) {
-    FILE * fp;
-    char * line = NULL;
+void search_file(const char* file_name, char P[], HashTable lastTable) {
+    int index,
+		count = 0;
+	FILE *fp;
+    char *line = NULL;
     size_t len = 0;
     ssize_t read;
-    int count = 0;
 
     fp = fopen(file_name, "r");
     if (fp == NULL)
         exit(EXIT_FAILURE);
 
     while ((read = getline(&line, &len, fp)) != -1) {
-    	int index = search(line, P, lastTable);
+    	index = search(line, P, lastTable);
     	if(index != -1) {
     	//	printf("%i ", index);
     		++count;
@@ -220,7 +221,7 @@ void read_dirs(const char* dir_name, char P[], HashTable lastTable) {
 					read_dirs(str, P,lastTable);
 				} else {
 				 	printf("other %s\n", str);
-				 	read_file(str, P, lastTable);
+				 	search_file(str, P, lastTable);
 				}
 			}
 		}
