@@ -14,6 +14,7 @@ int indx = 0;
 
 void *allocmem(int sizeOf) {
 	void *pointer = malloc(sizeOf);
+
 	allocList[indx++] = pointer;
 //	printf("allocating %u \n", (unsigned int) pointer);
 	return pointer;
@@ -21,6 +22,7 @@ void *allocmem(int sizeOf) {
 
 void freemem() {
 	int i;
+
 	for(i =0; i < indx; i++) {
 //		printf("freeing %u \n", (unsigned int) allocList[i]);
 		free(allocList[i]);
@@ -28,21 +30,25 @@ void freemem() {
 }
 
 int hash(char key, int size) {
-	unsigned int hashval = 0;
 	int retval;
+	unsigned int hashval = 0;
+
 	hashval = (hashval << 5) + key;
 //	for (;key[0];key++) {
 //		hashval = (hashval << 5) + key[0];
 //	}
 	retval = hashval % size;
+
 	return retval;
 }
 
 int length(char S[]) {
 	int i = 0;
+
 	while(S[i] != '\0') {
 		++i;
 	}
+
 	return i;
 }
 
@@ -53,6 +59,7 @@ inline int minimum(int x, int y) {
 
 void hash_insert(HashTable h, char key, int data) {
 	int hashval = hash(key, h->size);
+
 	h->table[hashval] = hash_create_element(data, key, h->table[hashval]);
 }
 
@@ -90,6 +97,7 @@ void hash_delete(HashTable h, char key) {
 HashTable hash_create_table(int size) {
 	int i;
 	HashTable retval  = (HashTable) allocmem(sizeof(*retval));
+
 	retval->size = size;
 	retval->table = (TableElement *) allocmem(size * sizeof(TableElement *));
 
@@ -101,15 +109,20 @@ HashTable hash_create_table(int size) {
 
 TableElement hash_create_element(int data, char key, TableElement next) {
 	TableElement retval = (TableElement) allocmem(sizeof(*retval));
+
 	retval->data = data;
 	retval->key = key;
 	retval->next = next;
+
 	return retval;
 }
 
 int hash_calculate_length(char P[]) {
-	int i = 0, j = 0, count = 0;
-	int found = FALSE;
+	int i = 0,
+		j = 0,
+		count = 0,
+		found = FALSE;
+
 	while(P[i] != '\0') {
 		found = FALSE;
 		j = i+1;
@@ -125,27 +138,30 @@ int hash_calculate_length(char P[]) {
 
 		++i;
 	}
+
 	return count;
 }
 
 HashTable hash_create_last_lookup_table(char P[]) {
-	int size = hash_calculate_length(P);
+	int i = 0,
+		size = hash_calculate_length(P);
 	HashTable hashTable = hash_create_table(size);
 
-	int i = 0;
 	while(P[i] != '\0') {
 		char key = P[i];
 		hash_insert( hashTable, key, i);
 		++i;
 	}
+
 	return hashTable;
 }
 
 int search(char T[], char P[], HashTable table) {
-	int n = length(T);
-	int m = length(P);
-	int i = m -1;
-	int j = m -1;
+	int n = length(T),
+	    m = length(P),
+	    i = m -1,
+	    j = m -1;
+
 	while(i <= n -1) {
 		if( P[j] == T[i] ) {
 			if(j==0) {
@@ -159,6 +175,7 @@ int search(char T[], char P[], HashTable table) {
 			j = m - 1;
 		}
 	}
+
 	return -1;
 }
 
@@ -236,6 +253,7 @@ JNIEXPORT void JNICALL Java_JNISample_findFileSystemType(JNIEnv *jnienv, jobject
 JNIEXPORT void JNICALL Java_JNISample_stringManipulation (JNIEnv *jnienv, jobject jobject, jstring jstring) {
 	// puts("!!!Searching for files for phrase!!!");
 	char *phrase = jni_extract_string(jnienv, jstring);
+
 	printf("%s \n", phrase);
 
 	HashTable lastTable = hash_create_last_lookup_table(phrase);
@@ -266,4 +284,3 @@ JNIEXPORT void JNICALL Java_JNISample_search(JNIEnv *env, jobject obj, jstring s
 	printf("\n\nString String\n\n");
 	return;
 }
-
