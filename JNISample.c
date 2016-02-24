@@ -15,14 +15,14 @@ int indx = 0;
 void *allocmem(int sizeOf) {
 	void *pointer = malloc(sizeOf);
 	allocList[indx++] = pointer;
-	printf("allocating %u \n", (unsigned int) pointer);
+//	printf("allocating %u \n", (unsigned int) pointer);
 	return pointer;
 }
 
 void freemem() {
 	int i;
 	for(i =0; i < indx; i++) {
-		printf("freeing %u \n", (unsigned int) allocList[i]);
+//		printf("freeing %u \n", (unsigned int) allocList[i]);
 		free(allocList[i]);
 	}
 }
@@ -194,7 +194,7 @@ void read_file(const char* file_name, char P[], HashTable lastTable) {
     printf("Finished %i\n", count);
 }
 
-void read_dirs(const char* dir_name, char P[], HashTable lastTable){
+void read_dirs(const char* dir_name, char P[], HashTable lastTable) {
 	DIR *d = opendir(dir_name);
 	struct dirent *dir;
 
@@ -205,11 +205,11 @@ void read_dirs(const char* dir_name, char P[], HashTable lastTable){
 				char str[180];
 				sprintf(str, "%s/%s", dir_name, dir->d_name);
 				if(dir->d_name[0] != '.' && dir->d_type == DT_DIR) {
-					printf ("%s\n", str);
+//					printf ("%s\n", str);
 					read_dirs(str, P,lastTable);
 				} else {
-				 	 printf("other %s\n", str);
-				 	 read_file(str, P, lastTable);
+				 	printf("other %s\n", str);
+				 	read_file(str, P, lastTable);
 				}
 			}
 		}
@@ -217,11 +217,11 @@ void read_dirs(const char* dir_name, char P[], HashTable lastTable){
 	}
 }
 
-const char* jni_extract_string(JNIEnv* env, jstring string){
+const char* jni_extract_string(JNIEnv* env, jstring string) {
 	if(string == NULL)
 		return NULL;
 
-	return (*env)->GetStringUTFChars( env, string , NULL ) ;
+	return (*env)->GetStringUTFChars(env, string , NULL);
 }
 
 JNIEXPORT void JNICALL Java_JNISample_displayHelloWorld(JNIEnv *jnienv, jobject jobject) {
@@ -241,7 +241,7 @@ JNIEXPORT void JNICALL Java_JNISample_findFileSystemType(JNIEnv *jnienv, jobject
 
 JNIEXPORT void JNICALL Java_JNISample_stringManipulation (JNIEnv *jnienv, jobject jobject, jstring jstring) {
 	puts("!!!Searching for files for phrase!!!");
-	const char *phrase = jni_extract_string(jnienv, jstring);
+	char *phrase = jni_extract_string(jnienv, jstring);
 	printf("%s \n", phrase);
 
 	HashTable lastTable = hash_create_last_lookup_table(phrase);
@@ -267,3 +267,9 @@ JNIEXPORT void JNICALL Java_JNISample_integerManipulation(JNIEnv *jnienv, jobjec
 	printf("integerManipulation");
 	return;
 }
+
+JNIEXPORT void JNICALL Java_JNISample_search(JNIEnv *env, jobject obj, jstring str1, jstring str2) {
+	printf("\n\nString String\n\n");
+	return;
+}
+

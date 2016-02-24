@@ -63,6 +63,14 @@ JNIEXPORT void JNICALL Java_JNISample_objectManipulation
 JNIEXPORT void JNICALL Java_JNISample_integerManipulation
   (JNIEnv *, jobject, jint, jint);
 
+/*
+ * Class:     JNISample
+ * Method:    search
+ * Signature: (Ljava/lang/String;Ljava/lang/String;)V
+ */
+JNIEXPORT void JNICALL Java_JNISample_search
+  (JNIEnv *, jobject, jstring, jstring);
+
 #ifdef __cplusplus
 }
 #endif

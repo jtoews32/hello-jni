@@ -12,6 +12,7 @@ public class JNISample {
 	public native void characterManipulation(char c[]);
 	public native void objectManipulation(Object o);
 	public native void integerManipulation(int j, int k);
+	public native void search(String text, String phrase);
 	
 	static {
 		System.loadLibrary("foo");
@@ -29,6 +30,7 @@ public class JNISample {
 		new JNISample().characterManipulation(cQuery);
 		new JNISample().objectManipulation(null);
 		new JNISample().integerManipulation(1, 2);
+		new JNISample().search("Text", "Phrase");
 		
 	}
 
