@@ -1,13 +1,13 @@
-#include "JNISample.h"
-
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <dirent.h>
-#include "hash.h"
 #include <sys/stat.h>
+
+#include "JNISample.h"
+#include "hash.h"
 
 void *allocList[MAX_BUFFER];
 int indx = 0;
@@ -147,7 +147,6 @@ HashTable hash_create_last_lookup_table(char P[]) {
 	return hashTable;
 }
 
-
 int search(char T[], char P[], HashTable table) {
 	int n = length(T);
 	int m = length(P);
@@ -196,9 +195,8 @@ void read_file(const char* file_name, char P[], HashTable lastTable) {
 }
 
 void read_dirs(const char* dir_name, char P[], HashTable lastTable){
-	DIR *d;
+	DIR *d = opendir(dir_name);
 	struct dirent *dir;
-	d = opendir(dir_name);
 
 	if (d) {
 		while ((dir = readdir(d)) != NULL) {
@@ -219,48 +217,34 @@ void read_dirs(const char* dir_name, char P[], HashTable lastTable){
 	}
 }
 
-JNIEXPORT void JNICALL Java_JNISample_displayHelloWorld(JNIEnv *jnienv, jobject jobject) 
-{
+const char* jni_extract_string(JNIEnv* env, jstring string){
+	if(string == NULL)
+		return NULL;
+
+	return (*env)->GetStringUTFChars( env, string , NULL ) ;
+}
+
+JNIEXPORT void JNICALL Java_JNISample_displayHelloWorld(JNIEnv *jnienv, jobject jobject) {
 	printf("Hello world!\n");
 	return;
 }
 
-
-JNIEXPORT void JNICALL Java_JNISample_searchFileSystem(JNIEnv *jnienv, jobject jobject)
-{
-
+JNIEXPORT void JNICALL Java_JNISample_searchFileSystem(JNIEnv *jnienv, jobject jobject) {
 	printf("Search FileSystem!\n");
 	return;
 }
 
-
-JNIEXPORT void JNICALL Java_JNISample_findFileSystemType(JNIEnv *jnienv, jobject jobject)
-{
+JNIEXPORT void JNICALL Java_JNISample_findFileSystemType(JNIEnv *jnienv, jobject jobject) {
 	printf("find FileSystem Type!\n");
 	return;
 }
 
-const char* getCharFromString(JNIEnv* env, jstring string){
-    if(string == NULL)
-        return NULL;
-
-    char * path;
-    return (*env)->GetStringUTFChars( env, string , NULL ) ;
-}
-
-
-JNIEXPORT void JNICALL Java_JNISample_stringManipulation
-  (JNIEnv *jnienv, jobject jobject, jstring jstring)
-{
+JNIEXPORT void JNICALL Java_JNISample_stringManipulation (JNIEnv *jnienv, jobject jobject, jstring jstring) {
 	puts("!!!Searching for files for phrase!!!");
-	const char *phrase = getCharFromString(jnienv, jstring);
+	const char *phrase = jni_extract_string(jnienv, jstring);
 	printf("%s \n", phrase);
 
-
-	HashTable lastTable;
-
-	lastTable = hash_create_last_lookup_table(phrase);
-
+	HashTable lastTable = hash_create_last_lookup_table(phrase);
 	read_dirs("/home/jtoews/testfiles", phrase, lastTable);
 
 	freemem();
@@ -269,28 +253,17 @@ JNIEXPORT void JNICALL Java_JNISample_stringManipulation
 	return;
 }
 
-
-JNIEXPORT void JNICALL Java_JNISample_characterManipulation
-  (JNIEnv *jnienv, jobject jobject, jcharArray jcharArray)
-{
+JNIEXPORT void JNICALL Java_JNISample_characterManipulation(JNIEnv *jnienv, jobject jobject, jcharArray jcharArray) {
 	printf("characterManipulation\n");
 	return;
 }
 
-
-JNIEXPORT void JNICALL Java_JNISample_objectManipulation(JNIEnv *jnienv, jobject j1, jobject j2)
-{
+JNIEXPORT void JNICALL Java_JNISample_objectManipulation(JNIEnv *jnienv, jobject j1, jobject j2) {
 	printf("objectManipulation");
 	return;
 }
 
-
-JNIEXPORT void JNICALL Java_JNISample_integerManipulation(JNIEnv *jnienv, jobject jobject, jint j1, jint j2)
-{
+JNIEXPORT void JNICALL Java_JNISample_integerManipulation(JNIEnv *jnienv, jobject jobject, jint j1, jint j2) {
 	printf("integerManipulation");
 	return;
 }
-
-
-
-
