@@ -46,11 +46,9 @@ int length(char S[]) {
 	return i;
 }
 
-int minimum(int x, int y) {
-	if(x<y)
-		return x;
-	else
-		return y;
+inline int minimum(int x, int y) {
+	if(x<y) return x;
+	else return y;
 }
 
 void hash_insert(HashTable h, char key, int data) {
@@ -62,13 +60,9 @@ int hash_find(HashTable h, char key) {
 	int hashval = hash(key,h->size);
 	TableElement tmp = h->table[hashval];
 
-	for(;;) {
-		if(tmp == NULL)
-			break;
-
+	while(tmp != NULL) {
 		if(key == tmp->key)
 			return tmp->data;
-
 		tmp = tmp->next;
 	}
 
@@ -240,7 +234,7 @@ JNIEXPORT void JNICALL Java_JNISample_findFileSystemType(JNIEnv *jnienv, jobject
 }
 
 JNIEXPORT void JNICALL Java_JNISample_stringManipulation (JNIEnv *jnienv, jobject jobject, jstring jstring) {
-	puts("!!!Searching for files for phrase!!!");
+	// puts("!!!Searching for files for phrase!!!");
 	char *phrase = jni_extract_string(jnienv, jstring);
 	printf("%s \n", phrase);
 
@@ -249,7 +243,7 @@ JNIEXPORT void JNICALL Java_JNISample_stringManipulation (JNIEnv *jnienv, jobjec
 
 	freemem();
 
-	printf("stringManipulation");
+	// printf("stringManipulation");
 	return;
 }
 

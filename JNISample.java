@@ -23,15 +23,14 @@ public class JNISample {
 		String sQuery = "Hello";
 		char[] cQuery = sQuery.toCharArray();
 		
-		new JNISample().displayHelloWorld();
-		new JNISample().findFileSystemType();
-		new JNISample().searchFileSystem();
+	//	new JNISample().displayHelloWorld();
+	//	new JNISample().findFileSystemType();
+	//	new JNISample().searchFileSystem();
 		new JNISample().stringManipulation("Test");
 		new JNISample().characterManipulation(cQuery);
-		new JNISample().objectManipulation(null);
-		new JNISample().integerManipulation(1, 2);
+	//	new JNISample().objectManipulation(null);
+	//	new JNISample().integerManipulation(1, 2);
 		new JNISample().search("Text", "Phrase");
-		
 	}
 
 }
