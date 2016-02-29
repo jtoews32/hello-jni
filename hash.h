@@ -3,25 +3,24 @@
 #define TRUE 1
 
 typedef struct HashTable_ *HashTable;
-typedef struct TableElement_ *TableElement;
-
+typedef struct HashTableElement_ *HashTableElement;
 
 struct HashTable_ {
-	TableElement *table;
+	HashTableElement *table;
 	int size;
 	int last;
 };
-struct TableElement_ {
+struct HashTableElement_ {
 	int data;
 	char key;
-	TableElement next;
+	HashTableElement next;
 };
 
-int hash(char key, int size);
+int hash_function(char key, int size);
 
 HashTable hash_create_last_lookup_table(char[]);
 HashTable hash_create_table(int);
-TableElement hash_create_element(int, char, TableElement);
+HashTableElement hash_create_element(int, char, HashTableElement);
 
 void hash_insert(HashTable h, char key, int data);
 int hash_find(HashTable h, char key);

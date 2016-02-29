@@ -9,13 +9,13 @@
 #include "JNISample.h"
 #include "hash.h"
 
-void *allocList[MAX_BUFFER];
-int indx = 0;
+void *used_memory[MAX_BUFFER];
+int used_memory_index = 0;
 
 void *allocmem(int sizeOf) {
 	void *pointer = malloc(sizeOf);
 
-	allocList[indx++] = pointer;
+	used_memory[used_memory_index++] = pointer;
 //	printf("allocating %u \n", (unsigned int) pointer);
 	return pointer;
 }
@@ -23,13 +23,13 @@ void *allocmem(int sizeOf) {
 void freemem() {
 	int i;
 
-	for(i =0; i < indx; i++) {
-//		printf("freeing %u \n", (unsigned int) allocList[i]);
-		free(allocList[i]);
+	for(i =0; i < used_memory_index; i++) {
+//		printf("freeing %u \n", (unsigned int) used_memory[i]);
+		free(used_memory[i]);
 	}
 }
 
-int hash(char key, int size) {
+int hash_function(char key, int size) {
 	int retval;
 	unsigned int hashval = 0;
 
@@ -58,14 +58,14 @@ inline int minimum(int x, int y) {
 }
 
 void hash_insert(HashTable h, char key, int data) {
-	int hashval = hash(key, h->size);
+	int hashval = hash_function(key, h->size);
 
 	h->table[hashval] = hash_create_element(data, key, h->table[hashval]);
 }
 
 int hash_find(HashTable h, char key) {
-	int hashval = hash(key,h->size);
-	TableElement tmp = h->table[hashval];
+	int hashval = hash_function(key,h->size);
+	HashTableElement tmp = h->table[hashval];
 
 	while(tmp != NULL) {
 		if(key == tmp->key)
@@ -78,9 +78,9 @@ int hash_find(HashTable h, char key) {
 
 void hash_delete(HashTable h, char key) {
 	int index;
-	TableElement tmp;
+	HashTableElement tmp;
 
-	index = hash(key,h->size);
+	index = hash_function(key,h->size);
 /*
 	if (h->table[index] != NULL) {
 		if (strcmp(h->table[index]->key,key) == 0) {
@@ -99,7 +99,7 @@ HashTable hash_create_table(int size) {
 	HashTable retval  = (HashTable) allocmem(sizeof(*retval));
 
 	retval->size = size;
-	retval->table = (TableElement *) allocmem(size * sizeof(TableElement *));
+	retval->table = (HashTableElement *) allocmem(size * sizeof(HashTableElement *));
 
 	for (i=0; i<size; i++)
 		retval->table[i] = NULL;
@@ -107,8 +107,8 @@ HashTable hash_create_table(int size) {
 	return retval;
 }
 
-TableElement hash_create_element(int data, char key, TableElement next) {
-	TableElement retval = (TableElement) allocmem(sizeof(*retval));
+HashTableElement hash_create_element(int data, char key, HashTableElement next) {
+	HashTableElement retval = (HashTableElement) allocmem(sizeof(*retval));
 
 	retval->data = data;
 	retval->key = key;
